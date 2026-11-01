@@ -1,0 +1,20 @@
+[
+  {
+    "slotId": "2026-11-02T08:00",
+    "name": "Sam Tremblay",
+    "phone": "+16135550199",
+    "address": "88 Bank Street, Ottawa",
+    "notes": "Gravel driveway, gate on the left",
+    "id": "bea5c6bf-29c5-48aa-8884-3481af151113",
+    "createdAt": "2026-11-01T18:55:54.044Z"
+  },
+  {
+    "slotId": "2026-11-03T10:00",
+    "name": "Alex Chen",
+    "phone": "+16135550140",
+    "vehicle": "2019 Toyota RAV4",
+    "notes": "Light rust on frame",
+    "id": "587054b4-1163-425e-b841-c7591f8b4b54",
+    "createdAt": "2026-11-01T19:01:45.503Z"
+  }
+]
