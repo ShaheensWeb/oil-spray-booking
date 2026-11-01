@@ -9,7 +9,21 @@ export const config = {
   weekdayHours: [18, 19, 20, 21],
   weekendHours: [7, 8, 9, 10, 11, 12, 13],
   slotMinutes: 0,
+  vehicleTypes: {
+    sedan: { label: "Sedan", price: 150 },
+    truck: { label: "Truck", price: 200 },
+  },
 };
+
+export type VehicleType = keyof typeof config.vehicleTypes;
+
+export function startingPrice(type: VehicleType) {
+  return config.vehicleTypes[type].price;
+}
+
+export function priceLine(type: VehicleType) {
+  return `$${startingPrice(type)} cash starting price`;
+}
 
 export type Booking = {
   id: string;
@@ -17,6 +31,8 @@ export type Booking = {
   name: string;
   phone: string;
   vehicle: string;
+  vehicleType?: VehicleType;
+  startingPrice?: number;
   address?: string;
   notes: string;
   createdAt: string;

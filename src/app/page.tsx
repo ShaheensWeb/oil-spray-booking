@@ -1,11 +1,12 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { config, type Day } from "@/lib/config";
+import { config, priceLine, type Day, type VehicleType } from "@/lib/config";
 
 type Booked = {
   when: string;
   texted: boolean;
+  price: string;
 };
 
 export default function HomePage() {
@@ -15,6 +16,7 @@ export default function HomePage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [vehicle, setVehicle] = useState("");
+  const [vehicleType, setVehicleType] = useState<VehicleType | "">("");
   const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -49,13 +51,17 @@ export default function HomePage() {
       const response = await fetch("/api/book", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slotId, name, phone, vehicle, notes }),
+        body: JSON.stringify({ slotId, name, phone, vehicle, vehicleType, notes }),
       });
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error || "Booking failed.");
       }
-      setBooked({ when: data.when, texted: data.texted });
+      setBooked({
+        when: data.when,
+        texted: data.texted,
+        price: vehicleType ? priceLine(vehicleType) : "",
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Booking failed.");
       await loadSlots();
@@ -72,7 +78,8 @@ export default function HomePage() {
           <p className="section-label">Booked</p>
           <h2>See you then.</h2>
           <p>
-            {name}, you&apos;re down for <strong>{booked.when}</strong> with the {vehicle}.
+            {name}, you&apos;re down for <strong>{booked.when}</strong> with the {vehicle}.{" "}
+            {booked.price}.
           </p>
           <p className="success">
             {booked.texted
@@ -96,7 +103,8 @@ export default function HomePage() {
       <Header />
       <h1>Book undercoating. We&apos;ll text you.</h1>
       <p className="lede">
-        {config.tagline}. Pick a one-hour window and we&apos;ll confirm by text.
+        {config.tagline}. Sedans start at $150 cash. Trucks start at $200 cash.
+        Pick a one-hour window and we&apos;ll confirm by text.
         Weekdays 6:00 PM–10:00 PM. Weekends 7:00 AM–2:00 PM.
       </p>
       <p className="note questions">
@@ -164,6 +172,22 @@ export default function HomePage() {
               required
             />
           </label>
+          <div>
+            <span className="section-label">Vehicle type</span>
+            <div className="types">
+              {(Object.keys(config.vehicleTypes) as VehicleType[]).map((type) => (
+                <button
+                  key={type}
+                  className={`slot ${vehicleType === type ? "selected" : ""}`}
+                  type="button"
+                  onClick={() => setVehicleType(type)}
+                >
+                  {config.vehicleTypes[type].label}
+                  <small>${config.vehicleTypes[type].price} cash starting</small>
+                </button>
+              ))}
+            </div>
+          </div>
           <label>
             Notes
             <textarea
@@ -172,7 +196,7 @@ export default function HomePage() {
               placeholder="Rust spots, extra coverage, anything we should know"
             />
           </label>
-          <button className="book" type="submit" disabled={!slotId || busy}>
+          <button className="book" type="submit" disabled={!slotId || !vehicleType || busy}>
             {busy ? "Booking…" : "Text me to confirm"}
           </button>
           {error ? <p className="error">{error}</p> : null}

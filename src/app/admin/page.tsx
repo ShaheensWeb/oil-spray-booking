@@ -49,7 +49,11 @@ export default function AdminPage() {
             <strong>{formatSlotLong(booking.slotId)}</strong>
             <div>{booking.name}</div>
             <div>{booking.phone}</div>
-            <div>{booking.vehicle || booking.address}</div>
+            <div>
+              {booking.vehicle || booking.address}
+              {booking.vehicleType ? ` · ${booking.vehicleType}` : ""}
+              {booking.startingPrice ? ` · $${booking.startingPrice} cash starting` : ""}
+            </div>
             {booking.notes ? <div>{booking.notes}</div> : null}
           </article>
         ))}
