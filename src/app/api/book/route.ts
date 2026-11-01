@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     });
 
     const when = formatSlotLong(slotId);
-    const sent = await sendSms(
+    const sms = await sendSms(
       phone,
       `${config.businessName}: you're booked for undercoating ${when}. ${priceLine(vehicleType)}. Questions? Text ${config.phoneDisplay}.`,
     );
@@ -63,7 +63,8 @@ export async function POST(request: Request) {
     return NextResponse.json({
       bookingId: booking.id,
       when,
-      texted: sent,
+      texted: sms.sent,
+      smsReason: sms.reason ?? null,
     });
   } catch (error) {
     const message =

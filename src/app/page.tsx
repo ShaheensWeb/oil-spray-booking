@@ -7,6 +7,7 @@ type Booked = {
   when: string;
   texted: boolean;
   price: string;
+  smsReason?: string | null;
 };
 
 export default function HomePage() {
@@ -61,6 +62,7 @@ export default function HomePage() {
         when: data.when,
         texted: data.texted,
         price: vehicleType ? priceLine(vehicleType) : "",
+        smsReason: data.smsReason,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Booking failed.");
@@ -81,10 +83,14 @@ export default function HomePage() {
             {name}, you&apos;re down for <strong>{booked.when}</strong> with the {vehicle}.{" "}
             {booked.price}.
           </p>
-          <p className="success">
+          <p className={booked.texted ? "success" : "error"}>
             {booked.texted
               ? "A confirmation text is on its way."
-              : "Your booking is saved. Add Twilio keys to send the confirmation text."}
+              : booked.smsReason === "missing-keys"
+                ? "Your booking is saved, but Twilio is not set on this server. Add the Twilio keys in Render Environment."
+                : booked.smsReason
+                  ? `Your booking is saved, but the text did not send. ${booked.smsReason}`
+                  : "Your booking is saved, but the text did not send. On a Twilio trial, only a verified number gets a message."}
           </p>
           <p className="note">
             Questions? Text{" "}
