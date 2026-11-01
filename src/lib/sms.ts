@@ -40,7 +40,7 @@ export async function sendSms(to: string, body: string): Promise<SmsResult> {
   }
 
   const template = process.env.TWILIO_SMS_TEMPLATE?.trim();
-  const text = template === "off" ? body : template || trialTemplate;
+  const text = template && template !== "off" ? template : body;
   const client = twilio(sid, token);
 
   try {

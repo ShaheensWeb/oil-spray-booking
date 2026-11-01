@@ -54,8 +54,8 @@ Railway signups are often closed. Use [Render](https://render.com) instead.
 ```
 TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
-TWILIO_FROM_NUMBER=+17372508034
-TWILIO_SMS_TEMPLATE=sms_appointment_reminders
+TWILIO_FROM_NUMBER=+1your_purchased_twilio_number
+TWILIO_SMS_TEMPLATE=off
 BUSINESS_PHONE=+16134475428
 ADMIN_PASSWORD=jasko
 ```
