@@ -50,13 +50,11 @@ export async function POST(request: Request) {
       `${config.businessName}: you're booked for undercoating ${when}. ${priceLine(vehicleType)}. Questions? Text ${config.phoneDisplay}.`,
     );
 
-    const ownerPhone = process.env.BUSINESS_PHONE
-      ? toE164(process.env.BUSINESS_PHONE)
-      : null;
-    if (ownerPhone && ownerPhone !== phone) {
+    const ownerPhone = toE164(process.env.BUSINESS_PHONE || config.phoneDisplay);
+    if (ownerPhone) {
       await sendSms(
         ownerPhone,
-        `New booking: ${name}, ${phone}, ${vehicle} ${vehicleType}, ${priceLine(vehicleType)}, ${when}${notes ? `. Notes: ${notes}` : ""}`,
+        `${config.businessName} booking: ${name}, ${phone}, ${vehicle} (${config.vehicleTypes[vehicleType].label}), ${priceLine(vehicleType)}, ${when}${notes ? `. Notes: ${notes}` : ""}`,
       );
     }
 
