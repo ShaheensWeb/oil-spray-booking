@@ -1,6 +1,6 @@
 import { config } from "@/lib/config";
 import { toE164 } from "@/lib/phone";
-import { sendSms } from "@/lib/sms";
+import { notifyShop } from "@/lib/sms";
 import { setLatestBookingStatus } from "@/lib/store";
 import { formatSlotLong } from "@/lib/time";
 
@@ -48,12 +48,13 @@ export async function POST(request: Request) {
   }
 
   const when = formatSlotLong(booking.slotId);
-  const ownerPhone = toE164(process.env.BUSINESS_PHONE || config.phoneDisplay);
-  if (ownerPhone) {
-    await sendSms(
-      ownerPhone,
-      `${config.businessName}: ${booking.name} replied ${answer === "confirmed" ? "Y" : "N"} for ${booking.vehicle} on ${when}.`,
-    );
+  const shopText =
+    answer === "confirmed"
+      ? `${config.businessName} CONFIRMED: ${booking.name} booked ${booking.vehicle}${booking.vehicleType ? ` (${config.vehicleTypes[booking.vehicleType].label})` : ""} for ${when}. ${booking.phone}${booking.startingPrice ? `. $${booking.startingPrice} cash starting` : ""}`
+      : `${config.businessName} CANCELLED: ${booking.name} cancelled ${booking.vehicle} for ${when}. ${booking.phone}`;
+  const shop = await notifyShop(shopText);
+  if (!shop.sent) {
+    console.error("[shop confirm text failed]", shop.reason);
   }
 
   return new Response(

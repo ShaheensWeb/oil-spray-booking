@@ -71,3 +71,7 @@ export async function sendSms(to: string, body: string): Promise<SmsResult> {
     return { sent: false, reason: errorMessage(error) };
   }
 }
+
+export async function notifyShop(body: string) {
+  return sendSms(config.shopAlertPhone, body);
+}

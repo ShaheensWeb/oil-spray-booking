@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { config, priceLine, startingPrice, type VehicleType } from "@/lib/config";
 import { toE164 } from "@/lib/phone";
 import { createBooking } from "@/lib/store";
-import { sendSms } from "@/lib/sms";
+import { notifyShop, sendSms } from "@/lib/sms";
 import { formatSlotLong } from "@/lib/time";
 import { availableDays } from "@/lib/slots";
 
@@ -51,19 +51,17 @@ export async function POST(request: Request) {
       `${config.businessName}: Hi ${name}, you're booked ${when} for your ${vehicle} (${typeLabel}). ${priceLine(vehicleType)}. Reply Y to confirm or N to cancel. Questions? Text ${config.phoneDisplay}.`,
     );
 
-    const ownerPhone = toE164(process.env.BUSINESS_PHONE || config.phoneDisplay);
-    if (ownerPhone) {
-      await sendSms(
-        ownerPhone,
-        `${config.businessName} booking: ${name}, ${phone}, ${vehicle} (${config.vehicleTypes[vehicleType].label}), ${priceLine(vehicleType)}, ${when}${notes ? `. Notes: ${notes}` : ""}`,
-      );
-    }
+    const shop = await notifyShop(
+      `${config.businessName} NEW BOOKING: ${name}, ${phone}, ${vehicle} (${typeLabel}), ${priceLine(vehicleType)}, ${when}. Waiting for customer to reply Y.${notes ? ` Notes: ${notes}` : ""}`,
+    );
 
     return NextResponse.json({
       bookingId: booking.id,
       when,
       texted: sms.sent,
       smsReason: sms.reason ?? null,
+      shopTexted: shop.sent,
+      shopSmsReason: shop.reason ?? null,
     });
   } catch (error) {
     const message =

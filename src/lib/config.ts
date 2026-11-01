@@ -3,6 +3,7 @@ export const config = {
   city: "Ottawa",
   timezone: "America/Toronto",
   phoneDisplay: "613-447-5428",
+  shopAlertPhone: "+16134475428",
   twilioFrom: "+13658161392",
   tagline: "Premium vehicle undercoating with premium products",
   daysAhead: 14,

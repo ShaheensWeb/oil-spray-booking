@@ -8,6 +8,8 @@ type Booked = {
   texted: boolean;
   price: string;
   smsReason?: string | null;
+  shopTexted?: boolean;
+  shopSmsReason?: string | null;
 };
 
 export default function HomePage() {
@@ -63,6 +65,8 @@ export default function HomePage() {
         texted: data.texted,
         price: vehicleType ? priceLine(vehicleType) : "",
         smsReason: data.smsReason,
+        shopTexted: data.shopTexted,
+        shopSmsReason: data.shopSmsReason,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Booking failed.");
@@ -91,6 +95,13 @@ export default function HomePage() {
                 : booked.smsReason
                   ? `Your booking is saved, but the text did not send. ${booked.smsReason}`
                   : "Your booking is saved, but the text did not send. On a Twilio trial, only a verified number gets a message."}
+          </p>
+          <p className={booked.shopTexted ? "success" : "error"}>
+            {booked.shopTexted
+              ? `We also texted ${config.phoneDisplay} about this booking.`
+              : booked.shopSmsReason
+                ? `The shop text to ${config.phoneDisplay} did not send. ${booked.shopSmsReason}`
+                : `The shop text to ${config.phoneDisplay} did not send.`}
           </p>
           <p className="note">
             Questions? Text{" "}
