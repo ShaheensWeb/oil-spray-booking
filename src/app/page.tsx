@@ -72,16 +72,16 @@ export default function HomePage() {
           <p className="section-label">Booked</p>
           <h2>See you then.</h2>
           <p>
-            {name}, you&apos;re down for <strong>{booked.when}</strong>. Bring the {vehicle} to{" "}
-            <a href={config.mapsUrl} target="_blank" rel="noreferrer">
-              {config.shopAddress}
-            </a>
-            .
+            {name}, you&apos;re down for <strong>{booked.when}</strong> with the {vehicle}.
           </p>
           <p className="success">
             {booked.texted
               ? "A confirmation text is on its way."
               : "Your booking is saved. Add Twilio keys to send the confirmation text."}
+          </p>
+          <p className="note">
+            Questions? Text{" "}
+            <a href={`sms:+1${config.phoneDisplay.replace(/\D/g, "")}`}>{config.phoneDisplay}</a>.
           </p>
           <p>
             <a href="/">Book another slot</a>
@@ -96,12 +96,12 @@ export default function HomePage() {
       <Header />
       <h1>Book undercoating. We&apos;ll text you.</h1>
       <p className="lede">
-        Vehicle undercoating at{" "}
-        <a href={config.mapsUrl} target="_blank" rel="noreferrer">
-          {config.shopAddress}
-        </a>
-        . Pick a one-hour window, bring the vehicle here, and we&apos;ll confirm by text.
+        {config.tagline}. Pick a one-hour window and we&apos;ll confirm by text.
         Weekdays 6:00 PM–10:00 PM. Weekends 7:00 AM–2:00 PM.
+      </p>
+      <p className="note questions">
+        Questions? Text{" "}
+        <a href={`sms:+1${config.phoneDisplay.replace(/\D/g, "")}`}>{config.phoneDisplay}</a>.
       </p>
 
       <section className="panel">
@@ -177,7 +177,8 @@ export default function HomePage() {
           </button>
           {error ? <p className="error">{error}</p> : null}
           <p className="note">
-            Same-day slots disappear once the window has started.
+            Same-day slots disappear once the window has started. Questions? Text{" "}
+            <a href={`sms:+1${config.phoneDisplay.replace(/\D/g, "")}`}>{config.phoneDisplay}</a>.
           </p>
         </form>
       </section>

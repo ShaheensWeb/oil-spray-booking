@@ -1,8 +1,8 @@
-# Ottawa Oil Spray Booking
+# Ottawa Undercoating Booking
 
 Repo: [https://github.com/ShaheensWeb/oil-spray-booking](https://github.com/ShaheensWeb/oil-spray-booking)
 
-Customers book vehicle undercoating at **11 Sweetnam Drive, Ottawa**, leave their number, and get a confirmation text. Bookings are saved in `data/bookings.json`. The owner list is at `/admin`.
+Customers book premium vehicle undercoating, leave their number, and get a confirmation text. Bookings are saved in `data/bookings.json`. The owner list is at `/admin`.
 
 Business phone: **613-447-5428**. Admin password: **jasko**.
 

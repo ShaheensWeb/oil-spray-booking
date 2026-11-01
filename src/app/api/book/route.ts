@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     const when = formatSlotLong(slotId);
     const sent = await sendSms(
       phone,
-      `${config.businessName}: you're booked for undercoating ${when} at ${config.shopAddress}. Reply if you need to change it.`,
+      `${config.businessName}: you're booked for undercoating ${when}. Questions? Text ${config.phoneDisplay}.`,
     );
 
     const ownerPhone = process.env.BUSINESS_PHONE
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     if (ownerPhone && ownerPhone !== phone) {
       await sendSms(
         ownerPhone,
-        `New booking: ${name}, ${phone}, ${vehicle}, ${when} at ${config.shopAddress}${notes ? `. Notes: ${notes}` : ""}`,
+        `New booking: ${name}, ${phone}, ${vehicle}, ${when}${notes ? `. Notes: ${notes}` : ""}`,
       );
     }
 

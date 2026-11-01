@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: `${config.businessName} · Book a slot`,
-  description: `Book vehicle undercoating at ${config.shopAddress}. Pick a time and we'll text you to confirm.`,
+  description: `${config.tagline}. Book a one-hour slot in Ottawa and we'll text you to confirm.`,
 };
 
 export default function RootLayout({

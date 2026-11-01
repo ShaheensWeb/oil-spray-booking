@@ -1,10 +1,9 @@
 export const config = {
-  businessName: "Ottawa Oil Spray",
+  businessName: "Ottawa Undercoating",
   city: "Ottawa",
   timezone: "America/Toronto",
   phoneDisplay: "613-447-5428",
-  shopAddress: "11 Sweetnam Drive, Ottawa",
-  mapsUrl: "https://maps.google.com/?q=11+Sweetnam+Drive,+Ottawa",
+  tagline: "Premium vehicle undercoating with premium products",
   daysAhead: 14,
   closedWeekdays: [] as number[],
   weekdayHours: [18, 19, 20, 21],
