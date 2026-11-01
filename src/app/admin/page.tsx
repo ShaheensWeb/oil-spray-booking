@@ -47,6 +47,7 @@ export default function AdminPage() {
         {bookings?.map((booking) => (
           <article className="booking" key={booking.id}>
             <strong>{formatSlotLong(booking.slotId)}</strong>
+            {booking.status ? <div>{booking.status}</div> : null}
             <div>{booking.name}</div>
             <div>{booking.phone}</div>
             <div>

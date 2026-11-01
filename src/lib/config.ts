@@ -36,6 +36,7 @@ export type Booking = {
   startingPrice?: number;
   address?: string;
   notes: string;
+  status?: "pending" | "confirmed" | "cancelled";
   createdAt: string;
 };
 

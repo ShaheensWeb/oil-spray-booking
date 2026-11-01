@@ -85,7 +85,7 @@ export default function HomePage() {
           </p>
           <p className={booked.texted ? "success" : "error"}>
             {booked.texted
-              ? "A confirmation text is on its way."
+              ? "A confirmation text is on its way. Reply Y to confirm or N to cancel."
               : booked.smsReason === "missing-keys"
                 ? "Your booking is saved, but Twilio is not set on this server. Add the Twilio keys in Render Environment."
                 : booked.smsReason

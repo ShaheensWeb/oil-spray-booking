@@ -45,9 +45,10 @@ export async function POST(request: Request) {
     });
 
     const when = formatSlotLong(slotId);
+    const typeLabel = config.vehicleTypes[vehicleType].label;
     const sms = await sendSms(
       phone,
-      `${config.businessName}: you're booked for undercoating ${when}. ${priceLine(vehicleType)}. Questions? Text ${config.phoneDisplay}.`,
+      `${config.businessName}: Hi ${name}, you're booked ${when} for your ${vehicle} (${typeLabel}). ${priceLine(vehicleType)}. Reply Y to confirm or N to cancel. Questions? Text ${config.phoneDisplay}.`,
     );
 
     const ownerPhone = toE164(process.env.BUSINESS_PHONE || config.phoneDisplay);

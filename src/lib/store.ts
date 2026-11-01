@@ -27,23 +27,53 @@ export async function listBookings() {
 
 export async function bookedSlotIds() {
   const bookings = await readBookings();
-  return new Set(bookings.map((booking) => booking.slotId));
+  return new Set(
+    bookings
+      .filter((booking) => booking.status !== "cancelled")
+      .map((booking) => booking.slotId),
+  );
 }
 
 export async function createBooking(input: Omit<Booking, "id" | "createdAt">) {
   const run = writeQueue.then(async () => {
     const bookings = await readBookings();
-    if (bookings.some((booking) => booking.slotId === input.slotId)) {
+    if (
+      bookings.some(
+        (booking) => booking.slotId === input.slotId && booking.status !== "cancelled",
+      )
+    ) {
       throw new Error("That slot was just booked. Pick another time.");
     }
     const booking: Booking = {
       ...input,
+      status: input.status ?? "pending",
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
     };
     bookings.push(booking);
     await writeBookings(bookings);
     return booking;
+  });
+  writeQueue = run.then(() => undefined, () => undefined);
+  return run;
+}
+
+export async function setLatestBookingStatus(
+  phone: string,
+  status: "confirmed" | "cancelled",
+) {
+  const run = writeQueue.then(async () => {
+    const bookings = await readBookings();
+    const index = [...bookings]
+      .reverse()
+      .findIndex((booking) => booking.phone === phone && booking.status !== "cancelled");
+    if (index === -1) {
+      return null;
+    }
+    const realIndex = bookings.length - 1 - index;
+    bookings[realIndex] = { ...bookings[realIndex], status };
+    await writeBookings(bookings);
+    return bookings[realIndex];
   });
   writeQueue = run.then(() => undefined, () => undefined);
   return run;
