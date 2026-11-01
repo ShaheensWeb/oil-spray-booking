@@ -1,4 +1,7 @@
 import twilio from "twilio";
+import { config } from "./config";
+
+const retiredFrom = "+17372508034";
 
 const trialTemplate = "sms_appointment_reminders";
 
@@ -21,18 +24,26 @@ function errorMessage(error: unknown) {
   return "The confirmation text did not send.";
 }
 
+function fromNumber() {
+  const fromEnv = process.env.TWILIO_FROM_NUMBER?.trim();
+  if (!fromEnv || fromEnv === retiredFrom) {
+    return config.twilioFrom;
+  }
+  return fromEnv;
+}
+
 export function smsConfigured() {
   return Boolean(
     process.env.TWILIO_ACCOUNT_SID?.trim() &&
       process.env.TWILIO_AUTH_TOKEN?.trim() &&
-      process.env.TWILIO_FROM_NUMBER?.trim(),
+      fromNumber(),
   );
 }
 
 export async function sendSms(to: string, body: string): Promise<SmsResult> {
   const sid = process.env.TWILIO_ACCOUNT_SID?.trim();
   const token = process.env.TWILIO_AUTH_TOKEN?.trim();
-  const from = process.env.TWILIO_FROM_NUMBER?.trim();
+  const from = fromNumber();
 
   if (!sid || !token || !from) {
     console.log(`[sms skipped] missing keys to=${to}`);
